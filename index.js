@@ -1,116 +1,104 @@
-const arr1 = [1, 2, 3];
-const arr2 = [4, 5, 6];           
-const newConcat = arr1.concat(arr2);
-arr1.reverse()
-
-const arr1 = [1, 2, 3];
-const arr2 = [4, 5, 6];
-arr1.push(...arr2)
-
-const arr1 = [1, 2, 3];
-const arr2 = [4, 5, 6];
-arr1.unshift(...arr2)
-console.log(arr1);
-
-
-const arr = ['js', 'html', 'css']
-const shiftItem = arr.shift()
-const popItem = arr.pop()
-alert(shiftItem)
-alert(popItem)
-
-const arr = [1,2,3,4,5,6]
-const newSlice = arr.slice(0, 3)
-const newSliceBack = arr.slice(3, 5)
-
-
-const arr = [1,2,3,4,5] /** 1,4,5 */
-const newSplice = arr.splice(1, 2)
-
-
-const arr = [1,2,3,4,5] 
-const newSplice = arr.splice(1, arr.length-2) /** 2,3,4 */
-
-const arr = [1,2,3,4,5] /** 1,2,3,a,b,c,4,5 */
-arr.splice(3, 0, 'a', 'b', 'c')
-
-
-const arr = [1,2,3,4,5] 
-arr.splice(1, 0, 'a', 'b', ...arr.splice(4, 0, 'c'),...arr.splice(arr.length -0, 0, 'e'))
-
-const arr = [3, 4, 1, 2, 7].sort()
-
-const obj = {
-  js: 'test',
-  jq: 'hello',
-  css: 'transition'
+function funcSquiare(n) {
+  return n * n;
 }
-console.log(Object.keys(obj));
 
-
-
-const hasElem  = (arr, str) => {
-  return arr.some(el => el === str)
-}
-console.log(hasElem(['js', 'css', 'winter is coming'], 'cfwefw'));
-
-
-
-const findOneNum  = (arr, num) => { 
-  if(isNaN(num)) {
-    return 
-  }
-  for (let i = 0; i < arr.length; i++) {
-    if(arr[i] === num) {
-      return true
+function OtherMethod() {
+  this.push = function () {
+    for (let i = 0; i < arguments.length; i++) {
+      this[this.length++] = arguments[i];
     }
-    
-  }
-  return false
-}
-
- const arr = [1,2,3,3,5,6,7,7,8] 
- const arr2 = [1,2,3,4,5,6]
-
- const lookSameNum  = (items) => {
-   for (let i = 0; i < items.length; i++) {
-     if(items[i] === items[i - 1])
-     return true
-   }
-   return false
- }
-
- 
-const randomNums = (max, min) => {
-  let arr = []
-  for (let i = 0; i < 10; i++) {
-     arr.push(Math.floor(Math.random() * (max - min + 1)) + min) 
+    return this.length;
+  };
+  this.pop = function () {
+    const item = this[this.length--];
+    delete this[this.length];
+    return item;
+  };
+  this.forEach = function (func) {
+    for (let i = 0; i < this.length; i++) {
+      func(this[i]);
+    }
+  };
+  this.some = function (func) {
+    for (let i = 0; i < this.length; i++) {
+      if (func(this[i])) {
+        return true;
       }
-      return arr
+    }
+    return false;
+  };
+  this.every = function (func) {
+    for (let i = 0; i < this.length; i++) {
+      if (func(this[i]) === false) {
+        return false;
+      }
+    }
+    return true;
+  };
+  this.unshift = function () {
+    for (let i = this.length - 1; i >= 0; i--) {
+      this[i + arguments.length] = this[i];
+      this[i] = arguments[i];
+      
+    }
+    this.length = this.length + arguments.length
+    return this;
+  };
+  
+  this.shift = function () {
+
+     for (let i = 1; i < this.length; i++) {
+       this[i - 1] = this[i]
+        } 
+     while(this.length) {
+      this.pop()
+      break
+     }
+     
+    return 
+  };
+  this.reverse = function () {
+     let arr = []
+    for (let i = this.length -1; i >= 0; i--) {
+       arr.push(this[i])
+          }
+       return arr;
+  };
+  this.concat = function () {
+    const obj = Object.values(this).slice(0, -1);
+    for (let i = 0; i < arguments.length; i++) {
+      if (typeof arguments[i] === "object") {
+        Object.values(arguments[i]).forEach((el, i) => {
+          if (el === this.length) return;
+          obj.push(el);
+        });
+      } else obj.push(arguments[i]);
+    }
+    return obj;
+  };
+  this.map = function (func) {
+    let result = [];
+    for (let i = 0; i < this.length; i++) {
+      result.push(func(this[i]));
+    }
+    return result;
+  };
 }
-console.log(randomNums(78, 10));
 
- const arr = [4, -2, 5, 19, -130, 0, 10]
-
- const findMaxMinNum = (items) => {
-   const max = Math.max(...items)
-   const min = items.reduce((acc, el) => {
-       if(acc < el) {
-         return acc
-       } else return acc = el
-   }, 0)
-   return [max, min]
- }
-
- console.log(findMaxMinNum(arr));
-
-const arr = [12, 15, 20, 25, 59, 79]
-const arifmeticheskoe = (arr) => {
-  let result = 0
-  for (let i = 0; i < arr.length; i++) {
-      result+=arr[i]    
+function MyArray() {
+  this.length = 0;
+  for (let i = 0; i < arguments.length; i++) {
+    this.push(arguments[i]);
   }
-  return result/arr.length
 }
 
-console.log(arifmeticheskoe(arr));
+MyArray.prototype = new OtherMethod();
+
+const myArray = new MyArray(11, 24, 45, 62, 2);
+const myArray1 = new MyArray(44, 68, 1, 0, 41, 200);
+console.log(myArray1.reverse());
+console.log(myArray1);
+const myArray2 = myArray1.concat(myArray1);
+const squiare = myArray2.map(funcSquiare);
+console.log(myArray2);
+console.log(squiare);
