@@ -39,43 +39,44 @@ function OtherMethod() {
     for (let i = this.length - 1; i >= 0; i--) {
       this[i + arguments.length] = this[i];
       this[i] = arguments[i];
-      
     }
-    this.length = this.length + arguments.length
+    this.length = this.length + arguments.length;
     return this;
   };
-  
-  this.shift = function () {
 
-     for (let i = 1; i < this.length; i++) {
-       this[i - 1] = this[i]
-        } 
-     while(this.length) {
-      this.pop()
-      break
-     }
-     
-    return 
+  this.shift = function () {
+    for (let i = 1; i < this.length; i++) {
+      this[i - 1] = this[i];
+    }
+    while (this.length) {
+      return this.pop();
+    }
   };
   this.reverse = function () {
-     let arr = []
-    for (let i = this.length -1; i >= 0; i--) {
-       arr.push(this[i])
-          }
-       return arr;
-  };
-  this.concat = function () {
-    const obj = Object.values(this).slice(0, -1);
-    for (let i = 0; i < arguments.length; i++) {
-      if (typeof arguments[i] === "object") {
-        Object.values(arguments[i]).forEach((el, i) => {
-          if (el === this.length) return;
-          obj.push(el);
-        });
-      } else obj.push(arguments[i]);
+    for (let i = 0; i < this.length / 2; i++) {
+      let tmp = this[i];
+      a = this.length - 1 - i;
+      b = this.length - a - 1;
+      tmp = this[a];
+      this[a] = this[b];
+      this[b] = tmp;
     }
+    return this;
+  };
+
+  this.concat = function () {
+    const obj = Object.values(this);
+    Array.from(arguments).forEach((el, i) => {
+      for (let key in el) {
+        if (typeof el[key] === "number" && key !== 'length') {
+          obj.push(el[key]);
+        }
+      }
+    });
+   
     return obj;
   };
+
   this.map = function (func) {
     let result = [];
     for (let i = 0; i < this.length; i++) {
