@@ -1,6 +1,11 @@
 function funcSquiare(n) {
   return n * n;
 }
+function concatArr(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    return arr;
+  }
+}
 
 function OtherMethod() {
   this.push = function () {
@@ -41,7 +46,7 @@ function OtherMethod() {
       this[i] = arguments[i];
     }
     this.length = this.length + arguments.length;
-    return this;
+    return this.length;
   };
 
   this.shift = function () {
@@ -53,7 +58,7 @@ function OtherMethod() {
     }
   };
   this.reverse = function () {
-    for (let i = 0; i < this.length / 2; i++) {
+    for (let i = 0; i < Math.floor(this.length / 2); i++) {
       let tmp = this[i];
       a = this.length - 1 - i;
       b = this.length - a - 1;
@@ -64,16 +69,14 @@ function OtherMethod() {
     return this;
   };
 
-  this.concat = function () {
-    const obj = Object.values(this);
-    Array.from(arguments).forEach((el, i) => {
-      for (let key in el) {
-        if (typeof el[key] === "number" && key !== 'length') {
-          obj.push(el[key]);
-        }
-      }
-    });
-   
+  this.concat = function (arrs) {
+    let obj = new MyArray();
+    for (let i = 0; i < this.length; i++) {
+      obj.push(this[i]);
+    }
+    for (let i = 0; i < arrs.length; i++) {
+      obj.push(arrs[i]);
+    }
     return obj;
   };
 
@@ -96,7 +99,7 @@ function MyArray() {
 MyArray.prototype = new OtherMethod();
 
 const myArray = new MyArray(11, 24, 45, 62, 2);
-const myArray1 = new MyArray(44, 68, 1, 0, 41, 200);
+const myArray1 = new MyArray(44, 68, 1, 0, 41, 200, 7);
 console.log(myArray1.reverse());
 console.log(myArray1);
 const myArray2 = myArray1.concat(myArray1);
