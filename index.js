@@ -41,6 +41,9 @@ function OtherMethod() {
     return true;
   };
   this.unshift = function () {
+    if(!arguments.length) {
+      return
+    }
     for (let i = this.length - 1; i >= 0; i--) {
       this[i + arguments.length] = this[i];
       this[i] = arguments[i];
