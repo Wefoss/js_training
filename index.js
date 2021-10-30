@@ -7,42 +7,48 @@ function concatArr(arr) {
   }
 }
 
-function OtherMethod() {
-  this.push = function () {
+class MyArray {
+  constructor(array) {
+    this.length = 0;
+    for (let i = 0; i < arguments.length; i++) {
+      this.push(arguments[i]);
+    }
+  }
+  push() {
     for (let i = 0; i < arguments.length; i++) {
       this[this.length++] = arguments[i];
     }
     return this.length;
-  };
-  this.pop = function () {
+  }
+  pop() {
     const item = this[this.length--];
     delete this[this.length];
     return item;
-  };
-  this.forEach = function (func) {
+  }
+  forEach(func) {
     for (let i = 0; i < this.length; i++) {
       func(this[i]);
     }
-  };
-  this.some = function (func) {
+  }
+  some(func) {
     for (let i = 0; i < this.length; i++) {
       if (func(this[i])) {
         return true;
       }
     }
     return false;
-  };
-  this.every = function (func) {
+  }
+  every(func) {
     for (let i = 0; i < this.length; i++) {
       if (func(this[i]) === false) {
         return false;
       }
     }
     return true;
-  };
-  this.unshift = function () {
-    if(!arguments.length) {
-      return
+  }
+  unshift() {
+    if (!arguments.length) {
+      return;
     }
     for (let i = this.length - 1; i >= 0; i--) {
       this[i + arguments.length] = this[i];
@@ -50,29 +56,31 @@ function OtherMethod() {
     }
     this.length = this.length + arguments.length;
     return this.length;
-  };
+  }
 
-  this.shift = function () {
+  shift() {
+    let item = this[0];
     for (let i = 1; i < this.length; i++) {
       this[i - 1] = this[i];
     }
     while (this.length) {
-      return this.pop();
+      this.pop();
+      return item;
     }
-  };
-  this.reverse = function () {
+  }
+  reverse() {
     for (let i = 0; i < Math.floor(this.length / 2); i++) {
       let tmp = this[i];
-      a = this.length - 1 - i;
-      b = this.length - a - 1;
+      let a = this.length - 1 - i;
+      let b = this.length - a - 1;
       tmp = this[a];
       this[a] = this[b];
       this[b] = tmp;
     }
     return this;
-  };
+  }
 
-  this.concat = function (arrs) {
+  concat(arrs) {
     let obj = new MyArray();
     for (let i = 0; i < this.length; i++) {
       obj.push(this[i]);
@@ -81,31 +89,57 @@ function OtherMethod() {
       obj.push(arrs[i]);
     }
     return obj;
-  };
+  }
 
-  this.map = function (func) {
+  map(func) {
     let result = [];
     for (let i = 0; i < this.length; i++) {
       result.push(func(this[i]));
     }
     return result;
-  };
-}
+  }
 
-function MyArray() {
-  this.length = 0;
-  for (let i = 0; i < arguments.length; i++) {
-    this.push(arguments[i]);
+  flat(deeps) {
+    let result = new MyArray();
+    this.forEach((el) => {
+      if (MyArray.checkObj(el) && deeps) {
+        result = result.concat(el.flat(deeps - 1));
+      } else {
+        if (el !== undefined) {
+          result.push(el);
+        }
+      }
+    });
+    return result;
+  }
+
+  static checkObj(obj) {
+    return obj instanceof MyArray;
+  }
+
+  [Symbol.iterator]() {
+    let i = 0;
+    const temp = this;
+    return {
+      next() {
+        return {
+          value: temp[i++],
+          done: i > temp.length,
+        };
+      },
+    };
   }
 }
 
-MyArray.prototype = new OtherMethod();
-
 const myArray = new MyArray(11, 24, 45, 62, 2);
 const myArray1 = new MyArray(44, 68, 1, 0, 41, 200, 7);
+console.log(MyArray.checkObj(myArray));
 console.log(myArray1.reverse());
 console.log(myArray1);
 const myArray2 = myArray1.concat(myArray1);
 const squiare = myArray2.map(funcSquiare);
 console.log(myArray2);
 console.log(squiare);
+
+// const test = new MyArray(1, 2, 3, new MyArray(3, 4, 5, new MyArray(3, 4, 5, new MyArray(3, 4, 8))),new MyArray(3, 4, 5),new MyArray(3, 4, 15));
+// console.log(...test)
